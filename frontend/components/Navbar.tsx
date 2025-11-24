@@ -5,13 +5,18 @@ import { usePathname, useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import { useTransition } from 'react';
 import { logoutAction } from '@/app/api/auth/logout';
+import type { CurrentUser } from '@/lib/types';
 
 const links = [
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/upload', label: 'Upload' }
 ];
 
-export default function Navbar() {
+type NavbarProps = {
+  currentUser: CurrentUser | null;
+};
+
+export default function Navbar({ currentUser }: NavbarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -48,22 +53,26 @@ export default function Navbar() {
               {label}
             </Link>
           ))}
-          <Link
-            href="/login"
-            className={clsx(
-              'rounded px-3 py-1 transition',
-              pathname === '/login' ? 'bg-slate-800 text-cyan-300' : 'text-slate-400 hover:text-slate-200'
-            )}
-          >
-            Sign in
-          </Link>
-          <button
-            onClick={handleLogout}
-            disabled={isPending}
-            className="rounded border border-slate-600 px-3 py-1 text-slate-300 disabled:opacity-50"
-          >
-            Sign out
-          </button>
+          {!currentUser && (
+            <Link
+              href="/login"
+              className={clsx(
+                'rounded px-3 py-1 transition',
+                pathname === '/login' ? 'bg-slate-800 text-cyan-300' : 'text-slate-400 hover:text-slate-200'
+              )}
+            >
+              Sign in
+            </Link>
+          )}
+          {currentUser && (
+            <button
+              onClick={handleLogout}
+              disabled={isPending}
+              className="rounded border border-slate-600 px-3 py-1 text-slate-300 disabled:opacity-50"
+            >
+              Sign out
+            </button>
+          )}
         </nav>
       </div>
     </header>

@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any, List, Optional
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, RootModel
 
 
 class DatasetItem(BaseModel):
@@ -13,12 +13,11 @@ class DatasetItem(BaseModel):
     row_count: Optional[int]
     column_count: Optional[int]
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
-class DatasetListResponse(BaseModel):
-    __root__: List[DatasetItem]
+class DatasetListResponse(RootModel[List[DatasetItem]]):
+    pass
 
 
 class DatasetDetailResponse(BaseModel):

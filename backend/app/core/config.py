@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     aws_secret_access_key: str = ""
     s3_bucket: str = "insightforge-datasets"
     s3_region: str = "us-east-1"
+    local_storage_path: str = "storage"
 
     openai_api_key: str = ""
 
